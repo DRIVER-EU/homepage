@@ -27,28 +27,28 @@ const geofencer_webapp = process.env.geofencer_webapp; // || 'localhost:8080';  
 const geofencer_api = process.env.geofencer_api; // || 'localhost:8209'; // REST CONNECTION FROM VUE APPLICATION TO MANAGE GEOFENCER SERVICE
 const geofencer_notifications_api = process.env.geofencer_notifications_api; // || 'localhost:9995'; // REST CONNECTION FROM VUE APPLICATION TO GEOFENCER SERVICE (push)
 const geofencer_cs_api = process.env.geofencer_cs_api; // || 'localhost:3007'; // REST CONNECTION FROM VUE APPLICATION TO COMMON SENSE
-// Simulation service (and web management application) 
-const simulation_service_webapp = process.env.simulation_service_webapp; // || 'localhost:8080'; 
-const simulation_service_api = process.env.simulation_service_api; // || 'localhost:8209'; 
-const simulation_service_websocket = process.env.simulation_service_websocket; // || 'localhost:9995'; 
-
-
-
+// Simulation service (and web management application)
+const simulation_service_webapp = process.env.simulation_service_webapp; // || 'localhost:8080';
+const simulation_service_api = process.env.simulation_service_api; // || 'localhost:8209';
+const simulation_service_websocket = process.env.simulation_service_websocket; // || 'localhost:9995';
 
 const useSsl = process.env.ssl || false;
 
 // Sub DNS names
 const subdomain_replayservice = process.env.subdomain_replayer || 'replay-service';
 const subdomain_replayservice_api = process.env.subdomain_replayer_api || 'replay-service-api';
-const subdomain_copper_webapp = process.env.subdomain_copper_webapp ||'copper';
-const subdomain_copper_api = process.env.subdomain_copper_api ||'copper_api';
-const subdomain_geofencer_webapp = process.env.subdomain_geofencer_management ||'geofencer-webapp';
-const subdomain_geofencer_api = process.env.subdomain_geofencer_management_api ||'geofencer-api';
-const subdomain_geofencer_notifications_api = process.env.subdomain_geofencer_notification_api ||'geofencer-notifications-api';
-const subdomain_geofencer_cs_api = process.env.subdomain_geofencer_cs_api ||'geofencer-cs-api';
-const subdomain_simulation_service_webapp = process.env.subdomain_simulation_service_webapp || 'simulation-service-webapp';
-const subdomain_simulation_service_api = process.env.subdomain_simulation_service_api ||'simulation-service-api';
-const subdomain_simulation_service_websocket = process.env.subdomain_simulation_service_websocket ||'simulation-service-websocket';
+const subdomain_copper_webapp = process.env.subdomain_copper_webapp || 'copper';
+const subdomain_copper_api = process.env.subdomain_copper_api || 'copper_api';
+const subdomain_geofencer_webapp = process.env.subdomain_geofencer_management || 'geofencer-webapp';
+const subdomain_geofencer_api = process.env.subdomain_geofencer_management_api || 'geofencer-api';
+const subdomain_geofencer_notifications_api =
+  process.env.subdomain_geofencer_notification_api || 'geofencer-notifications-api';
+const subdomain_geofencer_cs_api = process.env.subdomain_geofencer_cs_api || 'geofencer-cs-api';
+const subdomain_simulation_service_webapp =
+  process.env.subdomain_simulation_service_webapp || 'simulation-service-webapp';
+const subdomain_simulation_service_api = process.env.subdomain_simulation_service_api || 'simulation-service-api';
+const subdomain_simulation_service_websocket =
+  process.env.subdomain_simulation_service_websocket || 'simulation-service-websocket';
 
 // Compose FQDN domain names (exposed outside proxy)
 const fqdn_replayservice = `${subdomain_replayservice}.${hostname}`.toLocaleLowerCase();
@@ -70,13 +70,13 @@ const title = process.env.title || 'Test-bed';
 const email = process.env.email || 'erik.vullings@tno.nl';
 const ssl = useSsl
   ? {
-    ssl: {
-      letsencrypt: {
-        email, // Domain owner/admin email
-        production: true, // WARNING: Only use this flag when the proxy is verified to work correctly to avoid being banned!
+      ssl: {
+        letsencrypt: {
+          email, // Domain owner/admin email
+          production: true, // WARNING: Only use this flag when the proxy is verified to work correctly to avoid being banned!
+        },
       },
-    },
-  }
+    }
   : undefined;
 
 const resolvers = [];
@@ -88,13 +88,13 @@ app.use(cors());
 app.use(async function (ctx, next) {
   // Redirect /replayservice/ to http://replayservice.<domain>
   // This are the names auto assigned by proxy.js
-  if (ctx.path === `/replayservice/`) ctx.redirect('http://' +  fqdn_replayservice) ;
-  if (ctx.path === `/copper/`) ctx.redirect('http://' +  fqdn_copper) ;
-  if (ctx.path === `/geofencer_webapp/`) ctx.redirect('http://' +  fqdn_geofencer_webapp) ;
-  if (ctx.path === `/geofencer_management/`) ctx.redirect('http://' +  fqdn_geofencer_webapp) ;
-  if (ctx.path === `/simulation_service_webapp/`) ctx.redirect('http://' +  fqdn_simulation_service_webapp) ;
-  if (ctx.path === `/simulation_service_api/`) ctx.redirect('http://' +  fqdn_simulation_service_api) ;
-  if (ctx.path === `/simulation_service_management/`) ctx.redirect('http://' +  fqdn_simulation_service_webapp) ;
+  if (ctx.path === `/replayservice/`) ctx.redirect('http://' + fqdn_replayservice);
+  if (ctx.path === `/copper/`) ctx.redirect('http://' + fqdn_copper);
+  if (ctx.path === `/geofencer_webapp/`) ctx.redirect('http://' + fqdn_geofencer_webapp);
+  if (ctx.path === `/geofencer_management/`) ctx.redirect('http://' + fqdn_geofencer_webapp);
+  if (ctx.path === `/simulation_service_webapp/`) ctx.redirect('http://' + fqdn_simulation_service_webapp);
+  if (ctx.path === `/simulation_service_api/`) ctx.redirect('http://' + fqdn_simulation_service_api);
+  if (ctx.path === `/simulation_service_management/`) ctx.redirect('http://' + fqdn_simulation_service_webapp);
   // The homepage GUI needs to get the current configuration
   if (ctx.method !== 'GET' || ctx.path !== '/services') return await next();
   ctx.type = 'json';
@@ -109,20 +109,19 @@ app.use(async function (ctx, next) {
     debugServices: {
       topics,
       schemas,
-	  replayservice,
-	  geofencer_webapp,
-	  simulation_service_webapp
+      replayservice,
+      geofencer_webapp,
+      simulation_service_webapp,
     },
     otherServices: {
       time,
       lfs,
-      copper
+      copper,
     },
   };
 });
 app.listen(port, () => console.log(`Homepage is listening on ${port}.`));
-console.log(`${(useSsl) ? 'SSL is enabled' : 'SSL is not enabled'}`);
-
+console.log(`${useSsl ? 'SSL is enabled' : 'SSL is not enabled'}`);
 
 if (schemas) {
   console.log(`Map external '${hostname}/schemas/*' --> to internal '${schemas}/*'`);
@@ -153,7 +152,9 @@ if (topics) {
 
 if (admin) {
   console.log(`Map external '${hostname}/admin/*' --> to internal '${admin}/*'`);
-  console.log(`Map external '${hostname}/AdminServiceWSEndpoint/*' --> to internal  '${topics}/AdminServiceWSEndpoint/*'`);
+  console.log(
+    `Map external '${hostname}/AdminServiceWSEndpoint/*' --> to internal  '${topics}/AdminServiceWSEndpoint/*'`
+  );
   console.log(`Map external '${hostname}/AdminService/*' --> to internal '${topics}/AdminService/*'`);
   const resolver = function (host, url, req) {
     if (/^\/admin\//.test(url) || /^\/AdminServiceWSEndpoint/.test(url) || /^\/AdminService/.test(url)) {
@@ -190,43 +191,39 @@ if (aar) {
 const proxy = require('redbird')(
   useSsl
     ? {
-      port: 80,
-      letsencrypt: {
-        path: 'certs',
-        port: 3000,
-      },
-      ssl: {
-        port: 443,
-      },
-      resolvers,
-    }
+        port: 80,
+        letsencrypt: {
+          path: 'certs',
+          port: 3333,
+        },
+        ssl: {
+          port: 443,
+        },
+        resolvers,
+      }
     : { port: 80, resolvers }
 );
 
-
-
 if (copper) {
-  
-    // Redirect COPPER REST API url
-    // An embedded REST url is used in the vue copper web application to connect to the server.
-    // When this url is configured for the reserve proxy (e.g. http://<proxy_domain>/copper_api),
-    // a problem occurs:
-    // The sub-path 'copper_api' isn't used for the websocket communication 
-    // The request from the vue webclient becomes http://<proxy>/socket.io, 
-    // Fot the reverse proxy it is ambigue where to redirect the stream if there are multiple websockets
-    // Using a subdomain is easiest solution to fix this problem
-    // Not tested under SSL (subdomain requires own certificate?)
-	console.log(`Map external '${fqdn_copper}/*' --> to internal '${copper}'`);
-	console.log(`Map external '${fqdn_copper_api}/*' --> to internal '${copper_api}'`);
-	proxy.register(`${fqdn_copper}`, `${copper}`);
-    proxy.register(`${fqdn_copper_api}`, `${copper_api}`);
+  // Redirect COPPER REST API url
+  // An embedded REST url is used in the vue copper web application to connect to the server.
+  // When this url is configured for the reserve proxy (e.g. http://<proxy_domain>/copper_api),
+  // a problem occurs:
+  // The sub-path 'copper_api' isn't used for the websocket communication
+  // The request from the vue webclient becomes http://<proxy>/socket.io,
+  // Fot the reverse proxy it is ambigue where to redirect the stream if there are multiple websockets
+  // Using a subdomain is easiest solution to fix this problem
+  // Not tested under SSL (subdomain requires own certificate?)
+  console.log(`Map external '${fqdn_copper}/*' --> to internal '${copper}'`);
+  console.log(`Map external '${fqdn_copper_api}/*' --> to internal '${copper_api}'`);
+  proxy.register(`${fqdn_copper}`, `${copper}`);
+  proxy.register(`${fqdn_copper_api}`, `${copper_api}`);
 } else console.log(`No proxy for copper configured.`);
 
-
 if (replayservice) {
-   // All url's in web app are relative, use subdomain to prevent resolve all url's (e.g. app.*.js can be used by multiple applications)
-   // Examples: app.<id>.css, chunk-vendors.<id>.css, app.<id>.js
-   // Create subdomain for web-site and subdomain for rest calls (use different ports)
+  // All url's in web app are relative, use subdomain to prevent resolve all url's (e.g. app.*.js can be used by multiple applications)
+  // Examples: app.<id>.css, chunk-vendors.<id>.css, app.<id>.js
+  // Create subdomain for web-site and subdomain for rest calls (use different ports)
   console.log(`Map external '${fqdn_replayservice}/*' --> to internal '${replayservice}'`);
   console.log(`Map external '${fqdn_replayservice_api}/*' --> to internal '${replayservice_api}'`);
   proxy.register(`${fqdn_replayservice}`, `${replayservice}`);
@@ -234,35 +231,40 @@ if (replayservice) {
 }
 
 if (simulation_service_api) {
-  if ((!fqdn_simulation_service_api) ||
-      (!fqdn_simulation_service_websocket) || 
-	  (!fqdn_simulation_service_webapp) || 
-	  (!simulation_service_webapp) ||
-	  (!simulation_service_api) ||
-	  (!simulation_service_websocket)) {
-	  console.log(`Quit application: simulation services is enabled, but not all environment variables are set.`);
-	  process.exit(1);
+  if (
+    !fqdn_simulation_service_api ||
+    !fqdn_simulation_service_websocket ||
+    !fqdn_simulation_service_webapp ||
+    !simulation_service_webapp ||
+    !simulation_service_api ||
+    !simulation_service_websocket
+  ) {
+    console.log(`Quit application: simulation services is enabled, but not all environment variables are set.`);
+    process.exit(1);
   }
   console.log(`Map external '${fqdn_simulation_service_webapp}/*' --> to internal '${simulation_service_webapp}'`);
   console.log(`Map external '${fqdn_simulation_service_api}/*' --> to internal '${simulation_service_api}'`);
-  console.log(`Map external '${fqdn_simulation_service_websocket}/*' --> to internal '${simulation_service_websocket}'`);
+  console.log(
+    `Map external '${fqdn_simulation_service_websocket}/*' --> to internal '${simulation_service_websocket}'`
+  );
 
   proxy.register(`${fqdn_simulation_service_webapp}`, `${simulation_service_webapp}`);
   proxy.register(`${fqdn_simulation_service_api}`, `${simulation_service_api}`);
   proxy.register(`${fqdn_simulation_service_websocket}`, `${simulation_service_websocket}`);
-
-}	 else console.log(`No proxy for simulation service configured.`);
+} else console.log(`No proxy for simulation service configured.`);
 
 if (geofencer_webapp) {
-  if ((!fqdn_geofencer_api) ||
-      (!fqdn_geofencer_notifications_api) || 
-	  (!fqdn_geofencer_cs_api) || 
-	  (!geofencer_webapp) ||
-	  (!geofencer_api) ||
-	  (!geofencer_notifications_api) ||
-	  (!geofencer_cs_api)) {
-	  console.log(`Quit application: geofencer services is enabled, but not all environment variables are set.`);
-	  process.exit(1);
+  if (
+    !fqdn_geofencer_api ||
+    !fqdn_geofencer_notifications_api ||
+    !fqdn_geofencer_cs_api ||
+    !geofencer_webapp ||
+    !geofencer_api ||
+    !geofencer_notifications_api ||
+    !geofencer_cs_api
+  ) {
+    console.log(`Quit application: geofencer services is enabled, but not all environment variables are set.`);
+    process.exit(1);
   }
   console.log(`Map external '${fqdn_geofencer_webapp}/*' --> to internal '${geofencer_webapp}'`);
   console.log(`Map external '${fqdn_geofencer_api}/*' --> to internal '${geofencer_api}'`);
@@ -272,7 +274,7 @@ if (geofencer_webapp) {
   proxy.register(`${fqdn_geofencer_api}`, `${geofencer_api}`);
   proxy.register(`${fqdn_geofencer_notifications_api}`, `${geofencer_notifications_api}`);
   proxy.register(`${fqdn_geofencer_cs_api}`, `${geofencer_cs_api}`);
-}	 else console.log(`No proxy for geofencer configured.`);
+} else console.log(`No proxy for geofencer configured.`);
 
 if (tmt) {
   console.log(`Map external '${hostname}/tmt/*' --> to internal '${tmt}/*'`);
@@ -283,7 +285,7 @@ if (tmt) {
 
 if (rest) {
   console.log(`Map external '${hostname}/rest' --> '${rest}'`);
-  proxy.register(`external ${hostname}/rest`, `${rest}`);
+  proxy.register(`${hostname}/rest`, `${rest}`);
 } else console.log(`No proxy for rest configured.`);
 
 // Timeservice uses subpath /time-service' (and websocket with subpath '/time-service/socket.io')
@@ -305,12 +307,9 @@ if (ost) {
   proxy.register(`${hostname}/ost`, `${ost}`);
 } else console.log(`No proxy for ost configured.`);
 
-
-
 // For the homepage
 console.log(`Map '${hostname}' --> 'localhost:${port}'`);
 proxy.register(hostname, `localhost:${port}`);
-
 
 console.log(`Open webbrowser on page http://${hostname}`);
 // redbird.register(hostname, `localhost:${port}`, ssl);
